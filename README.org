@@ -98,15 +98,18 @@
          codeql --version
          : CodeQL command-line toolchain release 2.13.5.
 
-         cd ~/local/codeql-dataflow-sql-injection-python
+         cd ~/local/codeql-javascript-multiflow/
 
-         DB=./python-sqli-db-$(git rev-parse --short HEAD)
-
+         DB=./js-sqli-db-$(git rev-parse --short HEAD)
          echo $DB
+
          test -d "$DB" && rm -fR "$DB"
          mkdir -p "$DB"
 
-         codeql database create --language=python -s . -j 8 -v $DB
+         codeql database create --language=javascript -s . -j 8 -v $DB
+
+         # Check it
+         unzip -v js-sqli-db-*/src.zip |grep add
        #+END_SRC
 
    11. add the database to the editor.  To do this there is a widget on the left
