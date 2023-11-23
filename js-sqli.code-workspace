@@ -2,6 +2,10 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"name": "[js-sqli-db-c860686 source archive]",
+			"uri": "codeql-zip-archive://0-72/Users/hohn/local/codeql-javascript-multiflow/js-sqli-db-c860686/src.zip"
 		}
 	],
 	"settings": {

@@ -1,6 +1,6 @@
 ---
 library: false
-name: hohn/codeql-javascript-multiflow
+name: codeql-javascript-multiflow-session
 version: 0.0.1
 # Install the queries for browsing.  They are not needed for this example.
 dependencies:

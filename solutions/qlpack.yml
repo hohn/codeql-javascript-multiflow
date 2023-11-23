@@ -1,0 +1,8 @@
+---
+library: false
+name: codeql-javascript-multiflow-solutions
+version: 0.0.1
+# Install the queries for browsing.  They are not needed for this example.
+dependencies:
+    codeql/javascript-all: "*"
+    codeql/javascript-queries: "*"

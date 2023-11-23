@@ -81,18 +81,27 @@
 
    8. install the pack dependencies for the CLI.  In a shell, use
        #+BEGIN_SRC sh
-         cd ~/local/codeql-dataflow-sql-injection-python
-         codeql pack install
+         cd ~/local/codeql-javascript-multiflow/
+         codeql pack install session
+         codeql pack install solutions
+         codeql pack install tests
        #+END_SRC
 
-   9. install the pack dependencies VS Code.  Do this via
-      : command palette
-      and then select all listed by
-      : CodeQL: Install Pack Dependencies 
+   9. Run the tests.
+      #+BEGIN_SRC sh 
+        cd ~/local/codeql-javascript-multiflow/
+        codeql test run tests/UltimateSource/UltimateSource.qlref 
+      #+END_SRC
 
-      It will generate a =codeql-pack.lock.yml= file.
 
-   10. use the following to build a CodeQL database.
+   10. install the pack dependencies VS Code.  Do this via
+       : command palette
+       and then select all listed by
+       : CodeQL: Install Pack Dependencies 
+
+       It will generate a =codeql-pack.lock.yml= file.
+
+   11. use the following to build a CodeQL database.
        #+BEGIN_SRC sh
          #* Build the db with source commit id.
          codeql --version
@@ -112,12 +121,12 @@
          unzip -v js-sqli-db-*/src.zip |grep add
        #+END_SRC
 
-   11. add the database to the editor.  To do this there is a widget on the left
+   12. add the database to the editor.  To do this there is a widget on the left
        side of editor that looks like QL and after selecting that, there is a
        databases panel. There are options to select from archive or folder. Select
        the "from folder" option and add the "database" folders you created above.
 
-   12. open the query =trivial.ql= and run it via
+   13. open the query =trivial.ql= and run it via
        : right click > run query on selected database
    
    There are several ways to install the CodeQL binaries and libraries.  Here is a
