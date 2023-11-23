@@ -54,7 +54,14 @@
 
       See script below.
 
-   4. (recommended for browsing) Install the codeql standard library matching the
+   4. use gh
+      #+BEGIN_SRC sh :session shared :results output 
+        gh codeql set-version 2.15.2
+
+      #+END_SRC
+
+
+   5. (recommended for browsing) Install the codeql standard library matching the
       binary version.  This is not needed to write or run queries anymore, but the
       library has many examples and searching it is much easier after extracting
       this archive:
@@ -62,36 +69,151 @@
 
       See script below.
 
-   5. clone this repository.
+   6. clone this repository.
       #+BEGIN_SRC sh :session shared :results output 
         mkdir ~/local && cd ~/local && \
             git clone https://github.com/hohn/codeql-dataflow-sql-injection-python.git
       #+END_SRC
 
-   6. open the workspace directory in VS Code.  This should just be
+   7. open the workspace directory in VS Code.  This should just be
       #+BEGIN_SRC sh :session shared :results output 
         cd ~/local/codeql-dataflow-sql-injection-python
         code python-sqli.code-workspace
       #+END_SRC
 
-   7. add the downloaded CodeQL CLI to the VS Code's search path.  Find the CodeQL
+   8. add the downloaded CodeQL CLI to the VS Code's search path.  Find the CodeQL
       extension settings, then paste the full path to the CodeQL CLI into the
       : Code QL > Cli: Executable Path 
       field.
 
-   8. install the pack dependencies for the CLI.  In a shell, use
+   9. install the pack dependencies for the CLI.  In a shell, use
        #+BEGIN_SRC sh
          cd ~/local/codeql-javascript-multiflow/
          codeql pack install session
          codeql pack install solutions
          codeql pack install tests
+
+         XX:  Does pack install use too-new libraries?
+         0:$ rm session/codeql-pack.lock.yml
+         (base) 
+         hohn@gh-hohn ~/local/codeql-javascript-multiflow
+         0:$ codeql pack install session
+         Dependencies resolved. Installing packages...
+         Install location: /Users/hohn/.codeql/packages
+         Package install location: /Users/hohn/.codeql/packages
+
+
+         0:$ rm -fR /Users/hohn/.codeql/packages 
+         (base) 
+         hohn@gh-hohn ~/local/codeql-javascript-multiflow
+         0:$ rm session/codeql-pack.lock.yml
+         (base) 
+         hohn@gh-hohn ~/local/codeql-javascript-multiflow
+
+         XX: no, same versions.
        #+END_SRC
 
-   9. Run the tests.
-      #+BEGIN_SRC sh 
-        cd ~/local/codeql-javascript-multiflow/
-        codeql test run tests/UltimateSource/UltimateSource.qlref 
-      #+END_SRC
+   10. Run the tests.
+       #+BEGIN_SRC sh 
+         cd ~/local/codeql-javascript-multiflow/
+         codeql test run tests/UltimateSource/UltimateSource.qlref 
+
+         gh codeql set-version 2.15.2
+         codeql test run tests/UltimateSource/UltimateSource.qlref 
+
+         Executing 1 tests in 1 directories.
+         Extracting test database in /Users/hohn/local/codeql-javascript-multiflow/tests/UltimateSource.
+         Compiling queries in /Users/hohn/local/codeql-javascript-multiflow/tests/UltimateSource.
+         Executing tests in /Users/hohn/local/codeql-javascript-multiflow/tests/UltimateSource.
+         [1/1 comp 557ms eval 255ms] PASSED /Users/hohn/local/codeql-javascript-multiflow/tests/UltimateSource/UltimateSource.qlref
+         Completed in 3s (extract 1.2s comp 557ms eval 255ms).
+         All 1 tests passed.
+
+         XX: with 2.13.5
+         one troubleshooting step could be to run
+         codeql resolve library-path --query=solutions/UltimateSource.ql
+         to see which --dbscheme location it prints. Is
+         the file at that location the same as the
+         javascript/semmlecode.javascript.dbscheme in the unpacked CLI? (edited)
+
+         0:$ gh codeql debug on
+
+         0:$ codeql resolve library-path --query=solutions/UltimateSource.ql
+         ++ dirname /Users/hohn/.local/share/gh/extensions/gh-codeql/gh-codeql
+         + rootdir=/Users/hohn/.local/share/gh/extensions/gh-codeql
+         ++ gh config get extensions.codeql.channel
+         + channel=
+         + :
+         ++ gh config get extensions.codeql.version
+         + version=v2.13.5
+         + '[' resolve = local-version ']'
+         ++ gh config get extensions.codeql.local-version
+         + local_version=
+         + :
+         + '[' -e .codeql-version ']'
+         + version=v2.13.5
+         + '[' -z resolve ']'
+         + '[' -z '' ']'
+         + channel=release
+         + repo=github/codeql-cli-binaries
+         ++ gh config get extensions.codeql.platform
+         + platform=
+         + :
+         + [[ -z '' ]]
+         + [[ darwin23 == \d\a\r\w\i\n* ]]
+         + platform=osx64
+         + '[' resolve = debug ']'
+         + '[' resolve = list-versions ']'
+         + '[' resolve = set-channel ']'
+         + '[' resolve = download ']'
+         + '[' resolve = set-version ']'
+         + '[' resolve = set-local-version ']'
+         + '[' resolve = unset-local-version ']'
+         + '[' resolve = list-installed ']'
+         + '[' resolve = cleanup ']'
+         + '[' resolve = cleanup-all ']'
+         + '[' resolve = install-stub ']'
+         + '[' -z v2.13.5 ']'
+         + download v2.13.5
+         + local version=v2.13.5
+         + '[' -z v2.13.5 ']'
+         + '[' v2.13.5 = latest ']'
+         + '[' -x /Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5/codeql ']'
+         + return 0
+         + export CODEQL_DIST=/Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5
+         + CODEQL_DIST=/Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5
+         + exec /Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5/codeql resolve library-path --query=solutions/UltimateSource.ql
+         --dbscheme=/Users/hohn/.codeql/packages/codeql/javascript-all/0.8.3/semmlecode.javascript.dbscheme
+         --full-library-path=/Users/hohn/local/codeql-javascript-multiflow/solutions:/Users/hohn/.codeql/packages/codeql/javascript-all/0.8.3:/Users/hohn/.codeql/packages/codeql/javascript-queries/0.8.3:/Users/hohn/.codeql/packages/codeql/mad/0.2.3:/Users/hohn/.codeql/packages/codeql/regex/0.2.3:/Users/hohn/.codeql/packages/codeql/suite-helpers/0.7.3:/Users/hohn/.codeql/packages/codeql/tutorial/0.2.3:/Users/hohn/.codeql/packages/codeql/typos/0.2.3:/Users/hohn/.codeql/packages/codeql/util/0.2.3:/Users/hohn/.codeql/packages/codeql/yaml/0.2.3
+         --no-default-compilation-cache
+         --compilation-cache=/Users/hohn/.codeql/compile-cache
+
+         # and manually
+         export CODEQL_DIST=/Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5
+         $CODEQL_DIST/codeql resolve library-path --query=solutions/UltimateSource.ql
+
+         --dbscheme=/Users/hohn/.codeql/packages/codeql/javascript-all/0.8.3/semmlecode.javascript.dbscheme
+         --full-library-path=/Users/hohn/local/codeql-javascript-multiflow/solutions:/Users/hohn/.codeql/packages/codeql/javascript-all/0.8.3:/Users/hohn/.codeql/packages/codeql/javascript-queries/0.8.3:/Users/hohn/.codeql/packages/codeql/mad/0.2.3:/Users/hohn/.codeql/packages/codeql/regex/0.2.3:/Users/hohn/.codeql/packages/codeql/suite-helpers/0.7.3:/Users/hohn/.codeql/packages/codeql/tutorial/0.2.3:/Users/hohn/.codeql/packages/codeql/typos/0.2.3:/Users/hohn/.codeql/packages/codeql/util/0.2.3:/Users/hohn/.codeql/packages/codeql/yaml/0.2.3
+         --no-default-compilation-cache
+         --compilation-cache=/Users/hohn/.codeql/compile-cache
+
+         0:$ find $CODEQL_DIST | grep 'javascript/semmlecode.javascript.dbscheme'
+         /Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5/javascript/semmlecode.javascript.dbscheme
+         /Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5/javascript
+         /semmlecode.javascript.dbscheme.stats
+
+         0:$ cmp /Users/hohn/.codeql/packages/codeql/javascript-all/0.8.3/semmlecode.javascript.dbscheme \
+             /Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5/javascript/semmlecode.javascript.dbscheme
+         /Users/hohn/.codeql/packages/codeql/javascript-all/0.8.3/semmlecode.javascript.dbscheme /Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5/javascript/semmlecode.javascript.dbscheme differ: char 3917, line 165
+
+         1:$ diff /Users/hohn/.codeql/packages/codeql/javascript-all/0.8.3/semmlecode.javascript.dbscheme     /Users/hohn/.local/share/gh/extensions/gh-codeql/dist/release/v2.13.5/javascript/semmlecode.javascript.dbscheme
+         165d164
+         < | 40 = @using_decl_stmt
+         168c167
+         < @decl_stmt = @var_decl_stmt | @const_decl_stmt | @let_stmt | @legacy_let_stmt | @using_decl_stmt;
+         ---
+         > @decl_stmt = @var_decl_stmt | @const_decl_stmt | @let_stmt | @legacy_let_stmt;
+       #+END_SRC
 
 
    10. install the pack dependencies VS Code.  Do this via
