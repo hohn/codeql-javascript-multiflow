@@ -1,3 +1,5 @@
+[[./images/under-construction.png]]
+
 * SQL injection example
   The primary purpose of this material is to serve as an introduction to CodeQL
   for Python.
