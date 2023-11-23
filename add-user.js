@@ -11,7 +11,7 @@ function get_new_id() {
     return Math.floor(Math.random() * 12345);
 }
 
-function write_info(id, info) {
+function connect_db() {
     const sqlite3 = require('sqlite3').verbose();
     const db = new sqlite3.Database(
         'users.sqlite',
@@ -25,19 +25,23 @@ function write_info(id, info) {
             }
         });
 
+    return db;
+}
+
+function write_info(db, id, info) {
     db.serialize();
     const query = `INSERT INTO users VALUES (${id}, "${info}")`;
     console.log(query);
     db.exec(query);
-
     db.close();
 }
 
 let add_user = () => {
     console.log("Running add-user");
-    info = get_user_info()
-    id = get_new_id()
-    write_info(id, info)
+    var info = get_user_info();
+    var id = get_new_id();
+    var db = connect_db();
+    write_info(db, id, info);
 }
 
 add_user()
