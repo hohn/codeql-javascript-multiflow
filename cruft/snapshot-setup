@@ -1,0 +1,15 @@
+#!/bin/bash
+usage="Set up the test / solution directories and a blank session
+
+Usage:
+    $0
+"
+if [ $# -ne 0 ]
+then
+    echo "$usage"
+    exit 1
+fi
+mkdir -p tests
+mkdir -p solutions
+echo 'import javascript' > session.ql
+

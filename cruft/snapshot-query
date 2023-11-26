@@ -1,0 +1,31 @@
+#!/bin/bash
+
+usage="Take a snapshot of the current session.ql
+
+Usage:
+    $0 TheSnapShotName
+"
+if [ $# -ne 1 ]
+then
+    echo "$usage"
+    exit 1
+fi
+
+if [ "$1" = "-h" ]
+then
+    echo "$usage"
+    exit 1
+fi
+
+qname=$1
+# create the tests
+mkdir tests/$qname
+touch tests/$qname/$qname.expected
+echo $qname.ql > tests/$qname/$qname.qlref     
+git add tests/$qname/$qname.*
+
+# snapshot the session
+cp session.ql solutions/$qname.ql
+git add solutions/$qname.ql
+
+# usage=snapshot-query ShowCmdFlowPath
