@@ -19,13 +19,14 @@ fi
 
 qname=$1
 # create the tests
-mkdir tests/$qname
+mkdir -p tests/$qname
 touch tests/$qname/$qname.expected
 echo $qname.ql > tests/$qname/$qname.qlref     
-git add tests/$qname/$qname.*
+git add tests/$qname/$qname.expected
+git add tests/$qname/$qname.qlref
 
 # snapshot the session
-cp session.ql solutions/$qname.ql
+cp add-user.js tests/$qname/
+cp session/session.ql solutions/$qname.ql
 git add solutions/$qname.ql
 
-# usage=snapshot-query ShowCmdFlowPath
