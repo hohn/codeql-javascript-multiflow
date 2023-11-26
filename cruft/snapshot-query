@@ -27,6 +27,7 @@ git add tests/$qname/$qname.qlref
 
 # snapshot the session
 cp add-user.js tests/$qname/
+git add tests/$qname/add-user.js
+
 cp session/session.ql solutions/$qname.ql
 git add solutions/$qname.ql
-
