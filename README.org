@@ -60,7 +60,6 @@
 
       #+END_SRC
 
-
    5. (recommended for browsing) Install the codeql standard library matching the
       binary version.  This is not needed to write or run queries anymore, but the
       library has many examples and searching it is much easier after extracting

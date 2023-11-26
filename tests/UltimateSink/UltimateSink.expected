@@ -1,0 +1,2 @@
+WARNING: Unused predicate uSink (/Users/hohn/local/codeql-javascript-multiflow/solutions/UltimateSink.ql:14,11-16)
+| add-user.js:4:16:4:37 | stdinBu ... tring() |
