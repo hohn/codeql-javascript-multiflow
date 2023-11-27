@@ -1,0 +1,54 @@
+nodes
+| add-user.js:4:9:4:37 | line |
+| add-user.js:4:16:4:37 | stdinBu ... tring() |
+| add-user.js:4:16:4:37 | stdinBu ... tring() |
+| add-user.js:6:5:6:45 | line |
+| add-user.js:6:12:6:15 | line |
+| add-user.js:6:12:6:45 | line.re ... gm, "") |
+| add-user.js:7:12:7:15 | line |
+| add-user.js:16:11:26:10 | db |
+| add-user.js:16:16:26:10 | new sql ...      }) |
+| add-user.js:16:16:26:10 | new sql ...      }) |
+| add-user.js:28:12:28:13 | db |
+| add-user.js:31:21:31:22 | db |
+| add-user.js:31:29:31:32 | info |
+| add-user.js:33:11:33:63 | query |
+| add-user.js:33:19:33:63 | `INSERT ... nfo}")` |
+| add-user.js:33:56:33:59 | info |
+| add-user.js:35:5:35:6 | db |
+| add-user.js:35:5:35:6 | db |
+| add-user.js:35:13:35:17 | query |
+| add-user.js:35:13:35:17 | query |
+| add-user.js:41:9:41:30 | info |
+| add-user.js:41:16:41:30 | get_user_info() |
+| add-user.js:43:9:43:25 | db |
+| add-user.js:43:14:43:25 | connect_db() |
+| add-user.js:44:16:44:17 | db |
+| add-user.js:44:24:44:27 | info |
+edges
+| add-user.js:4:9:4:37 | line | add-user.js:6:12:6:15 | line |
+| add-user.js:4:16:4:37 | stdinBu ... tring() | add-user.js:4:9:4:37 | line |
+| add-user.js:4:16:4:37 | stdinBu ... tring() | add-user.js:4:9:4:37 | line |
+| add-user.js:6:5:6:45 | line | add-user.js:7:12:7:15 | line |
+| add-user.js:6:12:6:15 | line | add-user.js:6:12:6:45 | line.re ... gm, "") |
+| add-user.js:6:12:6:45 | line.re ... gm, "") | add-user.js:6:5:6:45 | line |
+| add-user.js:7:12:7:15 | line | add-user.js:41:16:41:30 | get_user_info() |
+| add-user.js:16:11:26:10 | db | add-user.js:28:12:28:13 | db |
+| add-user.js:16:16:26:10 | new sql ...      }) | add-user.js:16:11:26:10 | db |
+| add-user.js:16:16:26:10 | new sql ...      }) | add-user.js:16:11:26:10 | db |
+| add-user.js:28:12:28:13 | db | add-user.js:43:14:43:25 | connect_db() |
+| add-user.js:31:21:31:22 | db | add-user.js:35:5:35:6 | db |
+| add-user.js:31:21:31:22 | db | add-user.js:35:5:35:6 | db |
+| add-user.js:31:29:31:32 | info | add-user.js:33:56:33:59 | info |
+| add-user.js:33:11:33:63 | query | add-user.js:35:13:35:17 | query |
+| add-user.js:33:11:33:63 | query | add-user.js:35:13:35:17 | query |
+| add-user.js:33:19:33:63 | `INSERT ... nfo}")` | add-user.js:33:11:33:63 | query |
+| add-user.js:33:56:33:59 | info | add-user.js:33:19:33:63 | `INSERT ... nfo}")` |
+| add-user.js:41:9:41:30 | info | add-user.js:44:24:44:27 | info |
+| add-user.js:41:16:41:30 | get_user_info() | add-user.js:41:9:41:30 | info |
+| add-user.js:43:9:43:25 | db | add-user.js:44:16:44:17 | db |
+| add-user.js:43:14:43:25 | connect_db() | add-user.js:43:9:43:25 | db |
+| add-user.js:44:16:44:17 | db | add-user.js:31:21:31:22 | db |
+| add-user.js:44:24:44:27 | info | add-user.js:31:29:31:32 | info |
+#select
+| add-user.js:35:13:35:17 | query | add-user.js:4:16:4:37 | stdinBu ... tring() | add-user.js:35:13:35:17 | query | Sql injected from $@ | add-user.js:4:16:4:37 | stdinBu ... tring() | here |
