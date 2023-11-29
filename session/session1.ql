@@ -8,6 +8,7 @@ import javascript
 // XX: debug flow query
 // import semmle.javascript.explore.ForwardDataFlow
 import DataFlow::PathGraph
+import DataFlow as DF
 
 // Flow to consider:
 //
@@ -15,7 +16,7 @@ import DataFlow::PathGraph
 // var ua = new GR('status');              //: source 2
 // ua.setValue('status',value);            //: taint step
 // ua.update();                            //: sink (if from source 2)
-
+//
 // var value = this.getParameter('value'); //: source 1
 class ParameterSource extends CallExpr {
   ParameterSource() {
@@ -44,6 +45,16 @@ predicate setValueTaintStep(DataFlow::Node pred, DataFlow::Node succ) {
   )
 }
 
+// source 2 to sink flow
+DF::SourceNode grType(DF::TypeTracker t) {
+  t.start() and
+  exists(GR gr | result.asExpr() = gr)
+  or
+  exists(DF::TypeTracker t2 | result = grType(t2).track(t2, t))
+}
+
+DF::SourceNode grType() { result = grType(DF::TypeTracker::end()) }
+
 // ua.update();                            //: sink (if from source 2)
 DotExpr updateExpression() { result.getPropertyName() = "update" }
 
@@ -54,6 +65,7 @@ class GR extends NewExpr {
   GR() { this.getCalleeName() = "GR" }
 }
 
+// The global flow configuration
 class FromRequestToGrUpdate extends TaintTracking::Configuration {
   FromRequestToGrUpdate() { this = "FromRequestToGrUpdate" }
 
@@ -69,7 +81,9 @@ class FromRequestToGrUpdate extends TaintTracking::Configuration {
     exists(VarRef grUpdate |
       sink.asExpr() = recordUpdate() and
       grUpdate = sink.asExpr() and
-      grUpdate.getName() = "ua"
+      grUpdate.getName() = "ua" and
+      // It's only a sink if it connects to source 2
+      grUpdate.flow().getALocalSource() = grType()
     )
   }
 }
