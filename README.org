@@ -239,7 +239,7 @@
          codeql database create --language=javascript -s . -j 8 -v $DB
 
          # Check it
-         unzip -v js-sqli-db-*/src.zip |grep add
+         unzip -v $DB/src.zip |egrep '(add|sample)'
        #+END_SRC
 
    12. add the database to the editor.  To do this there is a widget on the left
