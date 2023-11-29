@@ -11,5 +11,6 @@ then
 fi
 mkdir -p tests
 mkdir -p solutions
-echo 'import javascript' > session.ql
+echo 'import javascript' > session/session.ql
+echo 'import javascript' > session/session1.ql
 
