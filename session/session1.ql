@@ -40,9 +40,48 @@ predicate setValueTaintStep(DataFlow::Node pred, DataFlow::Node succ) {
     // succ = gr.flow().getASuccessor+() and
     //
     // Using control flow:
-    gr.getASuccessor+() = postgr and
+    // 1. without sanitizer
+    // gr.getASuccessor+() = postgr and
+    // succ.asExpr() = postgr
+    //
+    // 2. with recursive predicate, no sanitizer
+    recursiveSuccessor(gr, postgr) and
     succ.asExpr() = postgr
+    // // 3. with recursive predicate, with sanitizer
+    // sanitizerCheckedSuccessor(gr, postgr) and
+    // succ.asExpr() = postgr
   )
+}
+
+predicate foo(VarAccess gr, VarAccess postgr) {
+  exists(DotExpr temp, MethodCallExpr mce |
+    temp.getPropertyName() = "setValue" and
+    mce.getReceiver() = temp.getBase() and
+    gr = mce.getReceiver() and
+    gr.getASuccessor+() = postgr
+  )
+}
+
+predicate foo1(Expr gr, Expr postgr) {
+  exists(DotExpr temp, MethodCallExpr mce |
+    temp.getPropertyName() = "setValue" and
+    mce.getReceiver() = temp.getBase() and
+    gr = mce.getReceiver() and
+    recursiveSuccessor(gr, postgr)
+  )
+}
+
+// Def-Use special handling:
+// Include sanitizer check when flagging successive object member calls in taint step
+predicate recursiveSuccessor(ControlFlowNode gr, ControlFlowNode postgr) {
+  gr.getASuccessor() = postgr
+  or
+  exists(ControlFlowNode p |
+    recursiveSuccessor(gr, p) and
+    p.getASuccessor() = postgr
+  )
+  // The final postgr needs to be a VarAccess for this query, but for the
+  // recursion we need to be able to traverse expressions.
 }
 
 // source 2 to sink flow
