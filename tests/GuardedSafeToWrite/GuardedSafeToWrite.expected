@@ -1,0 +1,32 @@
+WARNING: Unused predicate foo (/Users/hohn/local/codeql-javascript-multiflow/solutions/GuardedSafeToWrite.ql:75,11-14)
+WARNING: Unused predicate foo1 (/Users/hohn/local/codeql-javascript-multiflow/solutions/GuardedSafeToWrite.ql:84,11-15)
+WARNING: Unused predicate foo2 (/Users/hohn/local/codeql-javascript-multiflow/solutions/GuardedSafeToWrite.ql:93,11-15)
+nodes
+| sample-utility-0.js:5:13:5:46 | value |
+| sample-utility-0.js:5:21:5:46 | this.ge ... value') |
+| sample-utility-0.js:5:21:5:46 | this.ge ... value') |
+| sample-utility-0.js:17:34:17:38 | value |
+| sample-utility-0.js:18:13:18:14 | ua |
+| sample-utility-0.js:18:13:18:14 | ua |
+| sample-utility-1.js:2:9:2:42 | value |
+| sample-utility-1.js:2:17:2:42 | this.ge ... value') |
+| sample-utility-1.js:2:17:2:42 | this.ge ... value') |
+| sample-utility-1.js:14:23:14:27 | value |
+| sample-utility-1.js:15:2:15:3 | ua |
+| sample-utility-1.js:15:2:15:3 | ua |
+edges
+| sample-utility-0.js:5:13:5:46 | value | sample-utility-0.js:17:34:17:38 | value |
+| sample-utility-0.js:5:21:5:46 | this.ge ... value') | sample-utility-0.js:5:13:5:46 | value |
+| sample-utility-0.js:5:21:5:46 | this.ge ... value') | sample-utility-0.js:5:13:5:46 | value |
+| sample-utility-0.js:17:34:17:38 | value | sample-utility-0.js:17:34:17:38 | value |
+| sample-utility-0.js:17:34:17:38 | value | sample-utility-0.js:18:13:18:14 | ua |
+| sample-utility-0.js:17:34:17:38 | value | sample-utility-0.js:18:13:18:14 | ua |
+| sample-utility-1.js:2:9:2:42 | value | sample-utility-1.js:14:23:14:27 | value |
+| sample-utility-1.js:2:17:2:42 | this.ge ... value') | sample-utility-1.js:2:9:2:42 | value |
+| sample-utility-1.js:2:17:2:42 | this.ge ... value') | sample-utility-1.js:2:9:2:42 | value |
+| sample-utility-1.js:14:23:14:27 | value | sample-utility-1.js:14:23:14:27 | value |
+| sample-utility-1.js:14:23:14:27 | value | sample-utility-1.js:15:2:15:3 | ua |
+| sample-utility-1.js:14:23:14:27 | value | sample-utility-1.js:15:2:15:3 | ua |
+#select
+| sample-utility-0.js:18:13:18:14 | ua | sample-utility-0.js:5:21:5:46 | this.ge ... value') | sample-utility-0.js:18:13:18:14 | ua | Data flow from $@ to $@. | sample-utility-0.js:5:21:5:46 | this.ge ... value') | this.ge ... value') | sample-utility-0.js:18:13:18:14 | ua | ua |
+| sample-utility-1.js:15:2:15:3 | ua | sample-utility-1.js:2:17:2:42 | this.ge ... value') | sample-utility-1.js:15:2:15:3 | ua | Data flow from $@ to $@. | sample-utility-1.js:2:17:2:42 | this.ge ... value') | this.ge ... value') | sample-utility-1.js:15:2:15:3 | ua | ua |
