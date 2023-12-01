@@ -1,0 +1,15 @@
+#!/bin/bash
+cd ~/local/codeql-javascript-multiflow/
+
+DB=./js-sqli-db-$(git rev-parse --short HEAD)
+echo $DB
+
+test -d "$DB" && rm -fR "$DB"
+mkdir -p "$DB"
+
+codeql database create --language=javascript -s . -j 8 -v $DB
+
+# Check it
+echo "The DB is in $DB"
+echo "Content check:"
+unzip -v $DB/src.zip |egrep '(add|sample)'
