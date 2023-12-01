@@ -17,6 +17,7 @@ import DataFlow as DF
 // ua.setValue('status',value);            //: taint step
 // ua.update();                            //: sink (if from source 2)
 //
+
 // var value = this.getParameter('value'); //: source 1
 class ParameterSource extends CallExpr {
   ParameterSource() {
@@ -41,38 +42,52 @@ predicate setValueTaintStep(DataFlow::Node pred, DataFlow::Node succ) {
     //
     // Using control flow:
     // 1. without sanitizer
-    // gr.getASuccessor+() = postgr and
-    // succ.asExpr() = postgr
+    gr.getASuccessor+() = postgr and
+    succ.asExpr() = postgr
     //
     // 2. with recursive predicate, no sanitizer
-    recursiveSuccessor(gr, postgr) and
-    succ.asExpr() = postgr
-    // // 3. with recursive predicate, with sanitizer
+    // recursiveSuccessor(gr, postgr) and
+    // succ.asExpr() = postgr
+    // 3. with recursive predicate, with sanitizer
     // sanitizerCheckedSuccessor(gr, postgr) and
     // succ.asExpr() = postgr
   )
 }
 
-predicate foo(VarAccess gr, VarAccess postgr) {
-  exists(DotExpr temp, MethodCallExpr mce |
-    temp.getPropertyName() = "setValue" and
-    mce.getReceiver() = temp.getBase() and
-    gr = mce.getReceiver() and
-    gr.getASuccessor+() = postgr
-  )
-}
-
-predicate foo1(Expr gr, Expr postgr) {
-  exists(DotExpr temp, MethodCallExpr mce |
-    temp.getPropertyName() = "setValue" and
-    mce.getReceiver() = temp.getBase() and
-    gr = mce.getReceiver() and
-    recursiveSuccessor(gr, postgr)
-  )
-}
-
 // Def-Use special handling:
-// Include sanitizer check when flagging successive object member calls in taint step
+// - Include sanitizer check when flagging successive object member calls in taint
+//   step.
+// - Stop at
+//       ua.safeToWrite()
+predicate sanitizerCheckedSuccessor(ControlFlowNode gr, ControlFlowNode postgr) {
+  gr.getASuccessor() = postgr and
+  not inSafeToWrite(postgr)
+  or
+  exists(ControlFlowNode p |
+    sanitizerCheckedSuccessor(gr, p) and
+    not gr.getASuccessor() = postgr and
+    p.getASuccessor() = postgr
+  )
+  // The final postgr needs to be a VarAccess for this query, but for the
+  // recursion we need to be able to traverse expressions.
+}
+
+predicate inSafeToWrite(ControlFlowNode p) {
+  exists(
+    //  DotExpr temp, MethodCallExpr mce,
+    IfStmt if_
+  |
+    // XX:
+    if_.getAChild+().getFirstControlFlowNode() = p
+    // and
+    // temp.getPropertyName() = "safeToWrite" and
+    // p = mce.getReceiver() and
+    // p = temp.getBase()
+  )
+}
+
+// Preparation for including a sanitizer check when flagging successive object
+// member calls in taint step
 predicate recursiveSuccessor(ControlFlowNode gr, ControlFlowNode postgr) {
   gr.getASuccessor() = postgr
   or
@@ -116,6 +131,10 @@ class FromRequestToGrUpdate extends TaintTracking::Configuration {
     setValueTaintStep(pred, succ)
   }
 
+  override predicate isSanitizerGuard(TaintTracking::SanitizerGuardNode nd) {
+    nd instanceof CanWriteGuard
+  }
+
   override predicate isSink(DataFlow::Node sink) {
     exists(VarRef grUpdate |
       sink.asExpr() = recordUpdate() and
@@ -124,6 +143,17 @@ class FromRequestToGrUpdate extends TaintTracking::Configuration {
       // It's only a sink if it connects to source 2
       grUpdate.flow().getALocalSource() = grType()
     )
+  }
+}
+
+class CanWriteGuard extends TaintTracking::SanitizerGuardNode, DataFlow::CallNode {
+  CanWriteGuard() { this.getCalleeName() = "safeToWrite" }
+
+  override predicate sanitizes(boolean outcome, Expr e) {
+    // outcome is the result of the conditional (the true or false branch)
+    outcome = true and
+    e = this.getReceiver().asExpr()
+    // or e.getASuccessor+() = this.getReceiver().asExpr()
   }
 }
 

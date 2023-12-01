@@ -50,9 +50,9 @@ DotExpr updateExpression() { result.getPropertyName() = "update" }
 VarRef recordUpdate() { result = updateExpression().getBase() }
 
 // var ua = new GR('status');     //: source 2
-class GR extends NewExpr {
-  GR() { this.getCalleeName() = "GR" }
-}
+// class GR extends NewExpr {
+//   GR() { this.getCalleeName() = "GR" }
+// }
 
 class FromRequestToGrUpdate extends TaintTracking::Configuration {
   FromRequestToGrUpdate() { this = "FromRequestToGrUpdate" }

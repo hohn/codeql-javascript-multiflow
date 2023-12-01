@@ -11,10 +11,10 @@ predicate uSource(MethodCallExpr sbts) {
 // Ultimate sink
 // ----------------
 //     db.exec(query);
-predicate uSink(MethodCallExpr dbe) {
-    //  sbts.getReceiver().(DotExpr).getPropertyNameExpr().(Identifier).getName() = "toString"
-    dbe.getMethodName().matches("%exec%") 
-}
+// predicate uSink(MethodCallExpr dbe) {
+//     //  sbts.getReceiver().(DotExpr).getPropertyNameExpr().(Identifier).getName() = "toString"
+//     dbe.getMethodName().matches("%exec%") 
+// }
 
 
 // Intermediate flow sink

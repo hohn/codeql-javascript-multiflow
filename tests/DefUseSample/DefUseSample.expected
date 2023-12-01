@@ -1,4 +1,3 @@
-WARNING: Unused class GR (/Users/hohn/local/codeql-javascript-multiflow/solutions/DefUseSample.ql:53,7-9)
 nodes
 | sample-utility-0.js:5:6:5:39 | value |
 | sample-utility-0.js:5:14:5:39 | this.ge ... value') |

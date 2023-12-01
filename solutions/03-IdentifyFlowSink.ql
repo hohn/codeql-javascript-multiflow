@@ -8,12 +8,12 @@ import DataFlow::PathGraph
 // Ultimate source
 // ----------------
 //     var line = stdinBuffer.toString();
-predicate uSource(MethodCallExpr sbts) { sbts.getMethodName().matches("%toString%") }
+// predicate uSource(MethodCallExpr sbts) { sbts.getMethodName().matches("%toString%") }
 
 // Ultimate sink
 // ----------------
 //     db.exec(query);
-predicate uSink(MethodCallExpr dbe) { dbe.getMethodName().matches("%exec%") }
+// predicate uSink(MethodCallExpr dbe) { dbe.getMethodName().matches("%exec%") }
 
 // Flow sink origin
 // ------------------------
@@ -29,7 +29,7 @@ class FlowSinkOrigin extends DataFlow::FlowLabel {
 class IdentifyFlowSink extends DataFlow::Configuration {
   IdentifyFlowSink() { this = "IdentifyFlowSink" }
 
-  override predicate isSource(DataFlow::Node nd, DataFlow::FlowLabel lbl) {
+  override predicate isSource(DataFlow::Node nd) {
     //     const db = new sqlite3.Database(
     exists(NewExpr newdb |
       newdb.getCalleeName() = "Database" and
@@ -37,7 +37,7 @@ class IdentifyFlowSink extends DataFlow::Configuration {
     )
   }
 
-  override predicate isSink(DataFlow::Node nd, DataFlow::FlowLabel lbl) {
+  override predicate isSink(DataFlow::Node nd) {
     //     db.exec(query);
     exists(Expr db, MethodCallExpr exec |
       exec.getMethodName() = "exec" and
