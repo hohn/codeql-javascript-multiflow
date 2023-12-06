@@ -44,17 +44,10 @@ predicate setValueTaintStep(DataFlow::Node pred, DataFlow::Node succ) {
     // 1. without sanitizer
     gr.getASuccessor+() = postgr and
     succ.asExpr() = postgr
-    //
-    // 2. with recursive predicate, no sanitizer
-    // recursiveSuccessor(gr, postgr) and
-    // succ.asExpr() = postgr
-    // 3. with recursive predicate, with sanitizer
-    // sanitizerCheckedSuccessor(gr, postgr) and
-    // succ.asExpr() = postgr
   )
 }
 
-// Def-Use special handling:
+// Def-Use special handling.  Not needed here, but a good example of recursive predicates.
 // - Include sanitizer check when flagging successive object member calls in taint
 //   step.
 // - Stop at
@@ -153,7 +146,6 @@ class CanWriteGuard extends TaintTracking::SanitizerGuardNode, DataFlow::CallNod
     // outcome is the result of the conditional (the true or false branch)
     outcome = true and
     e = this.getReceiver().asExpr()
-    // or e.getASuccessor+() = this.getReceiver().asExpr()
   }
 }
 
