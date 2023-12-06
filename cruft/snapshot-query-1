@@ -26,10 +26,10 @@ git add tests/$qname/$qname.expected
 git add tests/$qname/$qname.qlref
 
 # snapshot the session
-cp sample-utility-0.js tests/$qname/
+cp source/sample-utility-0.js tests/$qname/
 git add tests/$qname/sample-utility-0.js
 
-cp sample-utility-1.js tests/$qname/
+cp source/sample-utility-1.js tests/$qname/
 git add tests/$qname/sample-utility-1.js
 
 cp session/session1.ql solutions/$qname.ql

@@ -16,12 +16,13 @@ SampleUtility.prototype = Object.extendsObject(Processor, {
             ua.next();
             ua.setValue('status',value); // unsafe
             ua.update();
+            // Nested if() test.
+            if (ua.safeToWrite()) {
+                ua.setValue('status', value); // safe
+                ua.update();
+            }        
         }
 
-        if (ua.safeToWrite()) {
-            ua.setValue('status', value); // safe
-            ua.update();
-        }        
 
     },
     

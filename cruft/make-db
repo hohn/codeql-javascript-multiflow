@@ -7,7 +7,7 @@ echo $DB
 test -d "$DB" && rm -fR "$DB"
 mkdir -p "$DB"
 
-codeql database create --language=javascript -s . -j 8 -v $DB
+codeql database create --language=javascript -s source -j 8 -v $DB
 
 # Check it
 echo "The DB is in $DB"
