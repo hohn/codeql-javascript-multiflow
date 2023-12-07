@@ -7,25 +7,23 @@ function sus() {
         nothing()
     }
     else {
+        if (ua.safeToWrite()) {
+            ua.setValue('status', value);
+            ua.update();
+        }
+    }
+    if (funnyvar) {
         nothing()
+    }
+    else {
         if (ua.safeToWrite()) {
             ua.setValue('status', value);
             ua.update();
         }
     }
 
-    if (!ua.hasNext()) {
-        ua.initialize();
-        ua.setValue('status', value);
-        ua.insert();
-    }
-    else {
-        ua.next();
-        ua.setValue('status', value); 
-        ua.update(); // unsafe
-        if (ua.safeToWrite()) {
-            ua.setValue('status', value); // safe
-            ua.update();
-        }
-    }
+    ua.next();
+    ua.setValue('status', value);
+    ua.update(); // unsafe
+
 }
