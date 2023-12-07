@@ -32,7 +32,7 @@ SampleUtility.prototype = Object.extendsObject(Processor, {
             }
         }
 
-        if (ua == magicval) {
+        if (ua === magicval) {
             1
         } else {
             if (ua.safeToWrite()) {
