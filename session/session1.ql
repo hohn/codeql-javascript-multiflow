@@ -40,11 +40,36 @@ predicate setValueTaintStep(DataFlow::Node pred, DataFlow::Node succ) {
     // Trying data flow, this would be:
     // succ = gr.flow().getASuccessor+() and
     //
-    // Using control flow:
-    // 1. without sanitizer
+    // Using control flow
     gr.getASuccessor+() = postgr and
     succ.asExpr() = postgr
   )
+  or
+  exists(DotExpr stw_do, MethodCallExpr stw_mc, VarAccess stw_va, 
+  DotExpr sv_do, MethodCallExpr sv_mc, VarAccess sv_va |
+    // A safeToWrite ...
+    stw_do.getPropertyName() = "safeToWrite" and
+    stw_mc.getReceiver() = stw_do.getBase() and
+    stw_va = stw_mc.getReceiver() and
+    // ... followed by a  setValue
+    sv_do.getPropertyName() = "setValue" and
+    sv_mc.getReceiver() = sv_do.getBase() and
+    sv_va = sv_mc.getReceiver() and
+    //
+    stw_mc.getASuccessor+() = sv_va and
+    // The setValue taints the safeToWrite.  This is going up the CFG, which is
+    // backwards.  
+    // It's a lie to get the sanitizer to work.
+    pred.asExpr() = sv_va and 
+    succ.asExpr() = stw_va 
+  )
+}
+
+
+predicate tsTest1(DataFlow::Node pred, DataFlow::Node succ)  {
+  setValueTaintStep(pred, succ)
+  and 
+  pred.asExpr().getLocation().getFile().getBaseName().matches("%sample%1%")  
 }
 
 // Def-Use special handling.  Not needed here, but a good example of recursive predicates.
